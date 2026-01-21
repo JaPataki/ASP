@@ -7,7 +7,7 @@
     <AssemblyName>DominikPatakovASP</AssemblyName>
     <RootNamespace>DominikPatakovASP</RootNamespace>
   </PropertyGroup>
-
+	
   <ItemGroup>
     <None Include="DominikPatakovASP.csproj" />
   </ItemGroup>
