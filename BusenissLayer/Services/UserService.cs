@@ -22,6 +22,10 @@ namespace BusinessLayer.Services
 
         public async Task<bool> CreateAsync(UserDTO model)
         {
+            // prevent duplicate email
+            var existing = await _userRepository.GetByEmailAsync(model.Email);
+            if (existing != null) return false;
+
             var userEntity = new UserApp.DataLayer.Entities.UserEntity
             {
                 PublicId = model.PublicId == Guid.Empty ? Guid.NewGuid() : model.PublicId,

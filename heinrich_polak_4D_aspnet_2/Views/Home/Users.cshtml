@@ -35,7 +35,7 @@
                     <input type="checkbox" class="user-checkbox" value="@user.PublicId" />
                 </td>
                 <td>
-                    <a href="@Url.Action("userDetail", "Home", new { userPublicId = user.PublicId })">
+                    <a asp-controller="Home" asp-action="UpdateUser" asp-route-PublicId="@user.PublicId">
                         @user.Name
                     </a>
                 </td>
@@ -48,8 +48,7 @@
                 <td>
                     <a asp-controller="Home" asp-action="UpdateUser" asp-route-PublicId="@user.PublicId"
                        class="btn btn-warning btn-sm">Update</a>
-                    <a asp-controller="Home" asp-action="ResetPassword" asp-route-PublicId="@user.PublicId"
-                       class="btn btn-info btn-sm">Reset Password</a>
+                    
                     <a asp-controller="Home" asp-action="DeleteUser" asp-route-PublicId="@user.PublicId"
                        class="btn btn-danger btn-sm">Delete</a>
                 </td>

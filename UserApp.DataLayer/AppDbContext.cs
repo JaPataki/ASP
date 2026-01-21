@@ -34,6 +34,9 @@ namespace UserApp.DataLayer
             
             modelBuilder.Entity<OrderEntity>()
                 .HasIndex(o => o.Id);
+
+            modelBuilder.Entity<ItemEntity>()
+                .HasIndex(i => i.ItemId);
         }
     }
 }

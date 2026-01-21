@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace heinrich_polak_4D_aspnet_2.Models
+namespace DominikPatakovASP.Models
 {
     public class CreateUserModel
     {

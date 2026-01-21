@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using heinrich_polak_4D_aspnet_2.Models;
+using DominikPatakovASP.Models;
 using UserApp.DataLayer;
 using UserApp.DataLayer.Entities;
 using BusinessLayer.Services;
@@ -8,7 +8,7 @@ using BusinessLayer.Interfaces.Services;
 using Common.DTO;
 using Common.Enums;
 
-namespace heinrich_polak_4D_aspnet_2.Controllers
+namespace DominikPatakovASP.Controllers
 {
     public class HomeController : Controller
     {
@@ -240,30 +240,6 @@ namespace heinrich_polak_4D_aspnet_2.Controllers
                     await _userService.DeleteRangeAsync(userIds);
                 }
             }
-            return RedirectToAction(nameof(Users));
-        }
-
-        [HttpGet]
-        public IActionResult ResetPassword(Guid PublicId)
-        {
-            if (!IsUserLoggedIn() || !IsUserAdmin())
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
-            var model = new ResetPasswordModel { UserPublicId = PublicId };
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ResetPassword(ResetPasswordModel resetModel)
-        {
-            if (!IsUserLoggedIn() || !IsUserAdmin())
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
-            await _userService.ResetPasswordAsync(resetModel.UserPublicId, resetModel.NewPassword);
             return RedirectToAction(nameof(Users));
         }
 
