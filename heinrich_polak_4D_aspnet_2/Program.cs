@@ -4,6 +4,10 @@ using BusinessLayer.Services;
 using BusinessLayer.Interfaces.Services;
 using BusinessLayer.Interfaces.Repository;
 using BusinessLayer.Repository;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 internal class Program
 {
@@ -11,8 +15,21 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        
         builder.Services.AddControllersWithViews();
+        builder.Services.AddEndpointsApiExplorer();   
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "DominikPatakov_4D_aspnet_2 API",
+                Version = "v1"
+            });
+        });
+
         builder.Services.AddDbContext<AppDbContext>();
+
+      
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
 
@@ -21,6 +38,16 @@ internal class Program
 
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+
+        builder.Services.AddCors(option =>
+        {
+            option.AddPolicy("ReactLocalhost", policy =>
+            policy
+            .WithOrigins("http://localhost:5174", "https://localhost:5174")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            );
+        });
 
         builder.Services.AddSession(options =>
         {
@@ -31,17 +58,24 @@ internal class Program
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+        
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
             app.UseHsts();
+        }
+        else
+        {
+            
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseRouting();
+        app.UseCors("ReactLocalHost");
         app.UseSession();
 
         app.UseAuthorization();
@@ -50,7 +84,7 @@ internal class Program
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
 
-        // Ensure database is created using scoped service provider and seed items
+        
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
