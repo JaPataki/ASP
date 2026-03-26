@@ -34,7 +34,7 @@ builder.Services.AddCors(option =>
 {
     option.AddPolicy("ReactLocalHost", policy =>
     policy
-    .WithOrigins("https://localhost:5173", "https://localhost:5173")
+    .WithOrigins("https://localhost:5174", "https://localhost:5174")
     .AllowAnyHeader()
     .AllowAnyMethod()
     );
@@ -49,8 +49,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
 
+    app.MapGet("/", () => Results.Redirect("/swagger"));
+}
 
 
 app.UseHttpsRedirection();
