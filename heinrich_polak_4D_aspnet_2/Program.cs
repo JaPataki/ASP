@@ -15,9 +15,8 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        
         builder.Services.AddControllersWithViews();
-        builder.Services.AddEndpointsApiExplorer();   
+        builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo
@@ -29,7 +28,6 @@ internal class Program
 
         builder.Services.AddDbContext<AppDbContext>();
 
-      
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
 
@@ -42,10 +40,10 @@ internal class Program
         builder.Services.AddCors(option =>
         {
             option.AddPolicy("ReactLocalhost", policy =>
-            policy
-            .WithOrigins("http://localhost:5174", "https://localhost:5174")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
+                policy
+                    .WithOrigins("http://localhost:5173", "https://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
             );
         });
 
@@ -58,7 +56,6 @@ internal class Program
 
         var app = builder.Build();
 
-        
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
@@ -66,7 +63,6 @@ internal class Program
         }
         else
         {
-            
             app.UseSwagger();
             app.UseSwaggerUI();
         }
@@ -84,7 +80,6 @@ internal class Program
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
 
-        
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -120,6 +115,16 @@ internal class Program
                     StockQuantity = 100
                 });
 
+                db.SaveChanges();
+            }
+
+            var placeholderUsers = db.Users
+                .Where(u => u.Name == "string" && u.LastName == "string" && u.Email == "string")
+                .ToList();
+
+            if (placeholderUsers.Any())
+            {
+                db.Users.RemoveRange(placeholderUsers);
                 db.SaveChanges();
             }
         }

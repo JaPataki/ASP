@@ -22,7 +22,14 @@ namespace BusinessLayer.Services
 
         public async Task<bool> CreateAsync(UserDTO model)
         {
-            // prevent duplicate email
+            if (model == null ||
+                string.Equals(model.Name, "string", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(model.LastName, "string", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(model.Email, "string", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
             var existing = await _userRepository.GetByEmailAsync(model.Email);
             if (existing != null) return false;
 
@@ -126,6 +133,13 @@ namespace BusinessLayer.Services
             var userEntity = await _userRepository.GetByPublicIdAsync(model.PublicId);
             if (userEntity == null) return false;
             
+            if (string.Equals(model.Name, "string", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(model.LastName, "string", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(model.Email, "string", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
             userEntity.Name = model.Name;
             userEntity.Email = model.Email;
             userEntity.LastName = model.LastName;

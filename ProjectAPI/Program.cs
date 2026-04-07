@@ -8,13 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>();
 
-
-
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IItemService, ItemService>();    
@@ -33,17 +30,14 @@ builder.Services.AddSession(options =>
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("ReactLocalHost", policy =>
-    policy
-    .WithOrigins("https://localhost:5174", "https://localhost:5174")
-    .AllowAnyHeader()
-    .AllowAnyMethod()
+        policy
+            .WithOrigins("http://localhost:5173", "https://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
     );
 });
 
-
-
 var app = builder.Build();
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -52,7 +46,6 @@ if (app.Environment.IsDevelopment())
 
     app.MapGet("/", () => Results.Redirect("/swagger"));
 }
-
 
 app.UseHttpsRedirection();
 

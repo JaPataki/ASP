@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using BusinessLayer.Interfaces.Services;
 
 namespace ProjectAPI.Controllers
@@ -11,18 +13,20 @@ namespace ProjectAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IItemService _itemService;
+        private readonly ILogger<AdminApiController> _logger;
 
-        public AdminApiController(IUserService userService, IItemService itemService)
+        public AdminApiController(IUserService userService, IItemService itemService, ILogger<AdminApiController> logger)
         {
             _userService = userService;
             _itemService = itemService;
+            _logger = logger;
         }
 
-        
         [HttpGet("users")]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userService.GetAllAsync();
+            _logger.LogInformation("GetAllUsers returning {Count} users. Sample: {@Sample}", users?.Count() ?? 0, users?.FirstOrDefault());
             return Ok(users);
         }
 
@@ -60,7 +64,6 @@ namespace ProjectAPI.Controllers
             return NoContent();
         }
 
-        
         [HttpGet("items")]
         public async Task<IActionResult> GetAllItems()
         {
@@ -68,7 +71,6 @@ namespace ProjectAPI.Controllers
             return Ok(items);
         }
 
-        
         [HttpGet("items/{itemId:guid}")]
         public async Task<IActionResult> GetItemById(Guid itemId)
         {
